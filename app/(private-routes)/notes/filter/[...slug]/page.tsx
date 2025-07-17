@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import NotesClient from "./Notes.client";
-import { fetchNotes } from "@/lib/api";
+import { fetchServerNotes } from "@/lib/api/serverApi";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -9,7 +9,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const tag = slug[0] === "all" ? undefined : slug[0];
-  const { notes } = await fetchNotes({ page: 1, tag });
+  const { notes } = await fetchServerNotes({ page: 1, tag });
 
   const topNoteTitle = notes[0]?.tag || "All Notes";
 
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const NotesPage = async ({ params }: Props) => {
   const { slug } = await params;
   const tag = slug[0] === "all" ? undefined : slug[0];
-  const { notes, totalPages } = await fetchNotes({ page: 1, tag });
+  const { notes, totalPages } = await fetchServerNotes({ page: 1, tag });
 
   return (
     <NotesClient

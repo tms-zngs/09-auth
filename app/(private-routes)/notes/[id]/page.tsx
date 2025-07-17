@@ -1,4 +1,4 @@
-import { fetchNoteById } from "@/lib/api";
+import { fetchServerNoteById } from "@/lib/api/serverApi";
 import NoteDetailsClient from "./NoteDetails.client";
 import {
   QueryClient,
@@ -11,9 +11,8 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const resolvedParams = await params;
-  const id = Number(resolvedParams.id);
-  const note = await fetchNoteById(id);
+  const { id } = await params;
+  const note = await fetchServerNoteById(id);
 
   const noteTitle = note.title || "Note Details";
   const noteDescription =
@@ -45,13 +44,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const NoteDetails = async ({ params }: Props) => {
-  const resolvedParams = await params;
-  const id = Number(resolvedParams.id);
+  const { id } = await params;
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
-    queryFn: () => fetchNoteById(id),
+    queryFn: () => fetchServerNoteById(id),
   });
 
   return (

@@ -27,12 +27,12 @@
   gap: 1rem;
 }
 
-.navigation li a {
+.navigation li {
   text-decoration: none;
   color: white;
   font-size: 1rem;
 }
 
-.navigation li a:hover {
+.navigation li:hover {
   color: #ddd;
 }
