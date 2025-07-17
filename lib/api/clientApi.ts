@@ -83,7 +83,7 @@ export const createNote = async (newNote: NoteFormValues): Promise<Note> => {
   }
 };
 
-export const deleteNote = async (id: number): Promise<Note> => {
+export const deleteNote = async (id: string): Promise<Note> => {
   try {
     const response = await nextServer.delete<Note>(`/notes/${id}`);
     return response.data;
@@ -93,7 +93,7 @@ export const deleteNote = async (id: number): Promise<Note> => {
   }
 };
 
-export const register = async (data: UserRequest) => {
+export const register = async (data: UserRequest): Promise<User> => {
   try {
     const response = await nextServer.post<User>("/auth/register", data);
     return response.data;
@@ -103,7 +103,7 @@ export const register = async (data: UserRequest) => {
   }
 };
 
-export const login = async (data: UserRequest) => {
+export const login = async (data: UserRequest): Promise<User> => {
   try {
     const res = await nextServer.post<User>("/auth/login", data);
     return res.data;
@@ -115,19 +115,21 @@ export const login = async (data: UserRequest) => {
 
 export const checkSession = async () => {
   const res = await nextServer.get<CheckSessionRequest>("/auth/session");
-  return res;
+  return res.data;
 };
 
 export const logout = async (): Promise<void> => {
   await nextServer.post("/auth/logout");
 };
 
-export const getMe = async () => {
-  const { data } = await nextServer<User>(`/users/me`);
+export const getMe = async (): Promise<User> => {
+  const { data } = await nextServer.get<User>(`/users/me`);
   return data;
 };
 
-export const updateMe = async ({ username }: UpdateUserRequest) => {
+export const updateMe = async ({
+  username,
+}: UpdateUserRequest): Promise<User> => {
   try {
     const res = await nextServer.patch<User>("/users/me", { username });
     return res.data;
